@@ -1,5 +1,5 @@
 import type { UnassignedOrder } from "@/common/types/orders.type";
-import { Button } from "../ui/button"
+import { AssignOrder } from "../AssignOrder";
 
 const unassignedOrders: UnassignedOrder[] = [
   { id: "o9", hour: 16, units: 3 },
@@ -23,7 +23,7 @@ export const UnassignedOrders: React.FC = () => {
                 hour {order.hour} units {order.units}
               </div>
             </div>
-            <Button size="sm">Assign</Button>
+            <AssignOrder/>
           </div>
         ))}
       </div>
