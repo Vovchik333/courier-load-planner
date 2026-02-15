@@ -2,11 +2,12 @@ import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Modal } from "../Modal"
+import { Button } from "../ui/button"
 
 export const AddOrder: React.FC = () => {
   return (
     <Modal
-      buttonText="+ Add Order"
+      triggerElement={<Button variant="outline">+ Add Order</Button>}
       title="Add Order"
       submitButtonText="Create"
     >
