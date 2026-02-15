@@ -60,4 +60,14 @@ export class OrderRepository {
 
     return order;
   }
+
+  async findByDate(date: string): Promise<Order[]> {
+    return orders.filter((order) => order.date === date);
+  }
+
+  async findUnassignedByDate(date: string): Promise<Order[]> {
+    return orders.filter(
+      (order) => order.date === date && order.courierId === null,
+    );
+  }
 }
