@@ -2,6 +2,7 @@ import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Modal } from "../Modal"
+import { Button } from "../ui/button"
 
 type Props = {
 
@@ -12,7 +13,7 @@ export const AssignOrder: React.FC<Props> = ({
 }) => {
   return (
     <Modal
-      buttonText="Assign"
+      triggerElement={<Button variant="outline">Assign</Button>}
       title="Assign Order"
     >
       <Field>

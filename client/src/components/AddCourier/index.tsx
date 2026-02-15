@@ -2,11 +2,12 @@ import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Modal } from "../Modal"
+import { Button } from "../ui/button"
 
 export const AddCourier = () => {
   return (
     <Modal
-      buttonText="+ Add Courier"
+      triggerElement={<Button variant="outline">+ Add Courier</Button>}
       title="Add Courier"
     >
       <Field>

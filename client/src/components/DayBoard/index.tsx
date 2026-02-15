@@ -3,6 +3,8 @@ import { Notes } from "../Notes";
 import { UnassignedOrders } from "../UnassignedOrders";
 import { formatHour } from "@/helpers/date.helper";
 import type { HourSlot } from "@/common/types/hour-slot.type";
+import { OrderDetails } from "../OrderDetails";
+import { Orders } from "../Orders";
 
 const couriers: Courier[] = [
   { name: "Alex", limit: 6 },
@@ -65,14 +67,18 @@ export function DayBoard() {
                         key={`${courier.name}-${hour}`}
                         className="border p-3 text-center cursor-pointer hover:bg-accent transition-colors"
                       >
-                        <div className="flex flex-col items-center gap-1">
-                          <span className="text-lg font-semibold">{load}</span>
-                          {overload > 0 && (
-                            <span className="text-xs text-destructive font-medium">
-                              over +{overload}
-                            </span>
-                          )}
-                        </div>
+                        <Orders 
+                          triggerElement={
+                            <div className="flex flex-col items-center gap-1">
+                              <span className="text-lg font-semibold">{load}</span>
+                              {overload > 0 && (
+                                <span className="text-xs text-destructive font-medium">
+                                  over +{overload}
+                                </span>
+                              )}
+                            </div>
+                          }
+                        />
                       </td>
                     )
                   })}

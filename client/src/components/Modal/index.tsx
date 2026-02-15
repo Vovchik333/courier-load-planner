@@ -12,7 +12,7 @@ import { FieldGroup } from "@/components/ui/field"
 import type { ReactNode } from "react"
 
 type Props = {
-  buttonText: string;
+  triggerElement: ReactNode;
   title: string;
   submitButtonText?: string;
   cancelButtonText?: string;
@@ -20,7 +20,7 @@ type Props = {
 }
 
 export const Modal: React.FC<Props> = ({
-  buttonText,
+  triggerElement,
   title,
   submitButtonText='Save',
   cancelButtonText='Cancel',
@@ -30,7 +30,7 @@ export const Modal: React.FC<Props> = ({
     <Dialog>
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline">{buttonText}</Button>
+          {triggerElement}
         </DialogTrigger>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
