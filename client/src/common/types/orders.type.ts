@@ -1,5 +1,11 @@
-export interface UnassignedOrder {
-  id: string
-  hour: number
-  units: number
+export interface Order {
+  id: string;
+  date: string;
+  scheduledHour: number;
+  workUnits: number;
+  courierId: string | null;
 }
+
+export interface CreateOrderDto extends Omit<Order, 'id'> {}
+
+export interface AssignOrderDto extends Pick<Order, 'courierId'> {}
