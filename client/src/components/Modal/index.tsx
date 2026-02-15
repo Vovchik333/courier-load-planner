@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -17,6 +18,7 @@ type Props = {
   submitButtonText?: string;
   cancelButtonText?: string;
   children: ReactNode;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
 }
 
 export const Modal: React.FC<Props> = ({
@@ -24,15 +26,27 @@ export const Modal: React.FC<Props> = ({
   title,
   submitButtonText='Save',
   cancelButtonText='Cancel',
-  children
+  children,
+  onSubmit
 }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (onSubmit) {
+      await onSubmit(e);
+      // Закриваємо модалку після успішного submit
+      setOpen(false);
+    }
+  };
+
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          {triggerElement}
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-sm">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        {triggerElement}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
+        <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
@@ -42,11 +56,14 @@ export const Modal: React.FC<Props> = ({
           <DialogFooter>
             <Button type="submit">{submitButtonText}</Button>
             <DialogClose asChild>
-              <Button variant="outline">{cancelButtonText}</Button>
+              <Button 
+                variant="outline" 
+                type="button"
+              >{cancelButtonText}</Button>
             </DialogClose>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   )
 }

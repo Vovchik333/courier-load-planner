@@ -1,12 +1,17 @@
+import { useState } from "react"
 import { Header } from "./components/Header"
-import { DayBoard } from "./components/DayBoard"
+import { Dashboard } from "./components/Dashboard"
 
 function App() {
+  const [selectedDate, setSelectedDate] = useState(() => {
+    return new Date().toISOString().split('T')[0]
+  })
+
   return (
     <>
-      <Header/>
+      <Header selectedDate={selectedDate} onDateChange={setSelectedDate} />
       <main className="p-4">
-        <DayBoard />
+        <Dashboard date={selectedDate} />
       </main>
     </>
   )

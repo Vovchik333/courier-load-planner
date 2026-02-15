@@ -1,51 +1,58 @@
 import { Field } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Modal } from "../Modal"
 import { Button } from "../ui/button"
+import { useAssignOrder } from "@/hooks/useOrders"
+import { useCouriers } from "@/hooks/useCouriers"
 
-type Props = {
+type AssignOrderProps = {
+  orderId: string;
+};
 
-}
+export const AssignOrder: React.FC<AssignOrderProps> = ({ orderId }) => {
+  const assignOrder = useAssignOrder();
+  const { data: couriers } = useCouriers();
 
-export const AssignOrder: React.FC<Props> = ({
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const courierId = formData.get('move-to') as string;
+    
+    await assignOrder.mutateAsync({
+      orderId,
+      data: {
+        courierId: courierId === 'unassigned' ? null : courierId || null,
+      },
+    });
+  };
 
-}) => {
   return (
     <Modal
       triggerElement={<Button variant="outline">Assign</Button>}
       title="Assign Order"
+      onSubmit={handleSubmit}
     >
       <Field>
-        <div className="text-sm">
-          Order: o2 Date: 2026-02-13 Hour: 16:00
-        </div>
-      </Field>
-      <Field>
-        <Label htmlFor="current-courier">Current courier:</Label>
-        <Input 
-          id="current-courier" 
-          name="current-courier" 
-          value="Alex"
-          readOnly
-          className="bg-muted"
-        />
-      </Field>
-      <Field>
-        <Label htmlFor="move-to">Move to:</Label>
+        <Label htmlFor="move-to">Assign to:</Label>
         <select
           id="move-to"
           name="move-to"
           className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
-          defaultValue=""
+          defaultValue="unassigned"
         >
-          <option value="">Select courier</option>
-          <option value="any">Any courier</option>
-          <option value="alex">Alex</option>
-          <option value="oksana">Oksana</option>
-          <option value="ihor">Ihor</option>
+          <option value="unassigned">Unassigned</option>
+          {couriers?.map((courier) => (
+            <option key={courier.id} value={courier.id}>
+              {courier.name}
+            </option>
+          ))}
         </select>
       </Field>
+      {assignOrder.isError && (
+        <div className="text-sm text-destructive">
+          Error: {assignOrder.error?.message}
+        </div>
+      )}
     </Modal>
   )
 }
