@@ -1,10 +1,12 @@
 import { Header } from "./components/Header"
+import { DayBoard } from "./components/DayBoard"
 
 function App() {
   return (
     <>
       <Header/>
-      <main>
+      <main className="p-4">
+        <DayBoard />
       </main>
     </>
   )
