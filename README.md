@@ -37,13 +37,6 @@ npm install
 # Development mode (with hot reload)
 npm run start:dev
 
-# Production mode
-npm run start:prod
-
-# Build for production
-npm run build
-```
-
 The API will be available at `http://localhost:3000/api`
 
 **Note:** The server uses in-memory storage by default. Data will be reset on each server restart.
@@ -61,13 +54,6 @@ npm install
 
 # Development mode
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
 
 ### 3. Access the Application
 
