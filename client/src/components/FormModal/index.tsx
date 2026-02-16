@@ -21,7 +21,7 @@ type Props = {
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
 }
 
-export const Modal: React.FC<Props> = ({
+export const FormModal: React.FC<Props> = ({
   triggerElement,
   title,
   submitButtonText='Save',
@@ -33,9 +33,9 @@ export const Modal: React.FC<Props> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (onSubmit) {
       await onSubmit(e);
-      // Закриваємо модалку після успішного submit
       setOpen(false);
     }
   };
@@ -46,7 +46,7 @@ export const Modal: React.FC<Props> = ({
         {triggerElement}
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>

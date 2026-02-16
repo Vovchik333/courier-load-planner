@@ -1,5 +1,6 @@
 import type { RequestOptions } from "@/common/types/request-options.type";
 import { BASE_URL } from "@/config";
+import { QueryClient } from "@tanstack/react-query";
 
 async function request<T>(url: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, headers = {} } = options;
@@ -32,4 +33,14 @@ export const apiClient = {
   patch: <T>(url: string, data: unknown) => request<T>(url, { method: 'PATCH', body: data }),
   delete: <T>(url: string) => request<T>(url, { method: 'DELETE' }),
 };
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+      staleTime: 1000,
+    },
+  },
+})
 

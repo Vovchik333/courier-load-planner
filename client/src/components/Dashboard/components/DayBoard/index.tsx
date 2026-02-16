@@ -13,9 +13,12 @@ export const DayBoard: React.FC<Props> = ({
   slots,
   couriers
 }) => {
+  const firstSlot = formatHour(slots[0]);
+  const lastSlot = formatHour(slots[slots.length - 1]);
+
   return (
     <div className="flex-1">
-      <h2 className="text-xl font-semibold mb-4">Day board</h2>
+      <h2 className="text-xl font-semibold mb-4">Day board ({(firstSlot)} - {lastSlot})</h2>
       <div className="border rounded-lg overflow-hidden">
         <table className="w-full border-collapse">
           <thead>
@@ -41,9 +44,9 @@ export const DayBoard: React.FC<Props> = ({
                   </td>
                   {slots.map((hour) => {
                     const slot = loadBySlot.find((s: LoadBySlot) => s.hour === hour);
-                    const load = slot?.load || 0;
-                    const overload = slot?.overload || 0;
-                    const orders = slot?.orders || [];
+                    const load = slot?.load ?? 0;
+                    const overload = slot?.overload ?? 0;
+                    const orders = slot?.orders ?? [];
 
                     return (
                       <td

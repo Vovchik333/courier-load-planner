@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
-import { Modal } from "../Modal";
+import { FormModal } from "../FormModal";
 import { OrderDetails } from "./components/OrderDetails";
 import type { Order } from "@/common/types/orders.type";
+import { ViewModal } from "../ViewModal";
 
 type Props = {
   triggerElement: ReactNode;
@@ -13,14 +14,13 @@ export const Orders: React.FC<Props> = ({
   orders
 }) => {
   if (orders.length === 0) {
-    return <div className="text-center text-muted-foreground">No orders</div>;
+    return <div className="text-center text-muted-foreground">0</div>;
   }
 
   return (
-    <Modal
+    <ViewModal
       triggerElement={triggerElement}
       title="Order Details"
-      submitButtonText="Close"
     >
       <div className="max-h-[400px] overflow-y-auto pr-2 space-y-3">
         {orders.map(order => {
@@ -29,17 +29,11 @@ export const Orders: React.FC<Props> = ({
               key={order.id}
               className="border rounded-lg p-3 bg-muted/30"
             >
-              <OrderDetails
-                orderId={order.id}
-                date={order.date}
-                hour={order.scheduledHour}
-                courier={order.courierId || undefined}
-                units={order.workUnits}
-              />
+              <OrderDetails order={order} />
             </div>
           )
         })}
       </div>
-    </Modal>
+    </ViewModal>
   );
 }

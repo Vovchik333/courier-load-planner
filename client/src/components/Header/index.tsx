@@ -15,18 +15,20 @@ export const Header: React.FC<HeaderProps> = ({ selectedDate, onDateChange }) =>
         Courier Load Planner — Day View
       </h1>
       <div className="flex gap-2">
-        <Label htmlFor="date-header">Date:</Label>
-        <Input 
-          id="date-header" 
-          name="date" 
-          type="date"
-          value={selectedDate}
-          onChange={(e) => onDateChange(e.target.value)}
-        />
-      </div>
-      <div className="flex gap-2">
-        <AddCourier />
-        <AddOrder selectedDate={selectedDate} />
+        <div className="flex gap-2">
+          <Label htmlFor="date-header">Date:</Label>
+          <Input 
+            id="date-header" 
+            name="date" 
+            type="date"
+            value={selectedDate}
+            onChange={(e) => onDateChange(e.target.value)}
+          />
+        </div>
+        <div className="flex gap-2">
+          <AddCourier />
+          <AddOrder selectedDate={selectedDate} />
+        </div>
       </div>
     </header>
   );

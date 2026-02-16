@@ -1,7 +1,7 @@
 import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Modal } from "../Modal"
+import { FormModal } from "../FormModal"
 import { Button } from "../ui/button"
 import { useCreateCourier } from "@/hooks/useCouriers"
 
@@ -9,7 +9,6 @@ export const AddCourier = () => {
   const createCourier = useCreateCourier();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     const formData = new FormData(e.currentTarget);
     
     await createCourier.mutateAsync(
@@ -18,12 +17,10 @@ export const AddCourier = () => {
         hourlyLimit: parseInt(formData.get('hourlyLimit') as string, 10),
       }
     );
-    
-    e.currentTarget.reset();
   };
 
   return (
-    <Modal
+    <FormModal
       triggerElement={<Button variant="outline">+ Add Courier</Button>}
       title="Add Courier"
       onSubmit={handleSubmit}
@@ -41,6 +38,6 @@ export const AddCourier = () => {
           Error: {createCourier.error?.message}
         </div>
       )}
-    </Modal>
+    </FormModal>
   )
 }
