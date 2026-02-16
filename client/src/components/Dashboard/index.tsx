@@ -35,13 +35,12 @@ export const Dashboard: React.FC<Props> = ({
   const { slots, couriers, unassignedOrders } = data;
 
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-6 h-full min-h-0">
       <DayBoard 
         slots={slots} 
         couriers={couriers} 
       />
-
-      <div className="w-80 space-y-6">
+      <div className="w-96 space-y-6 flex-shrink-0">
         <UnassignedOrders orders={unassignedOrders} />
         <Notes />
       </div>

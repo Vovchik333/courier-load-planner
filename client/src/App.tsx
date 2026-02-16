@@ -11,10 +11,12 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Header selectedDate={selectedDate} onDateChange={setSelectedDate} />
-      <main className="p-4">
-        <Dashboard date={selectedDate} />
-      </main>
+      <div className="flex flex-col h-screen">
+        <Header selectedDate={selectedDate} onDateChange={setSelectedDate} />
+        <main className="flex-1 p-4 overflow-hidden">
+          <Dashboard date={selectedDate} />
+        </main>
+      </div>
     </QueryClientProvider>
   )
 }

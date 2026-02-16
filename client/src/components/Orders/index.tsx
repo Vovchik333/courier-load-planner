@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { FormModal } from "../FormModal";
 import { OrderDetails } from "./components/OrderDetails";
 import type { Order } from "@/common/types/orders.type";
 import { ViewModal } from "../ViewModal";
