@@ -31,12 +31,12 @@ export const TableBody: React.FC<Props> = ({ couriers, slots }) => {
               return (
                 <td
                   key={`${courier.id}-${hour}`}
-                  className="border p-3 text-center cursor-pointer hover:bg-accent transition-colors"
+                  className="border text-center cursor-pointer hover:bg-accent transition-colors"
                 >
                   <Orders 
                     orders={orders}
                     triggerElement={
-                      <div className="flex flex-col items-center gap-1">
+                      <div className="flex flex-col items-center gap-1 p-3">
                         <span className="text-lg font-semibold">{load}</span>
                         <OverloadIndicator 
                           overload={overload}

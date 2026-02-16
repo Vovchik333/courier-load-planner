@@ -5,6 +5,7 @@ import { FormModal } from "@/components/FormModal"
 import { useAssignOrder } from "@/hooks/useOrders"
 import { useCouriers } from "@/hooks/useCouriers"
 import type { Order } from "@/common/types/orders.type"
+import type { Courier } from "@/common/types/courier.type"
 import { SecondaryButton } from "../SecondaryButton"
 import { OrderInfo } from "./components/OrderInfo"
 import { CustomSelect, type SelectOption } from "../CustomSelect"
@@ -13,11 +14,22 @@ import { ErrorMessage } from "../ErrorMessage"
 type Props = {
   order: Order;
   triggerElement?: React.ReactNode;
+  couriers?: Courier[];
 };
 
-export const AssignOrder: React.FC<Props> = ({ order, triggerElement }) => {
+export const AssignOrder: React.FC<Props> = ({ 
+  order, 
+  triggerElement, 
+  couriers: 
+  providedCouriers
+}) => {
   const assignOrder = useAssignOrder();
-  const { data: couriers, isLoading: couriersLoading, isError: couriersError } = useCouriers();
+  const { 
+    data: fetchedCouriers, isLoading: couriersLoading, isError: couriersError } = useCouriers();
+  
+  const couriers = providedCouriers ?? fetchedCouriers;
+  const isLoading = providedCouriers ? false : couriersLoading;
+  const isError = providedCouriers ? false : couriersError;
 
   const currentCourier = couriers?.find(c => c.id === order.courierId);
   const isReassign = order.courierId !== null;
@@ -71,9 +83,9 @@ export const AssignOrder: React.FC<Props> = ({ order, triggerElement }) => {
           name="move-to"
           options={courierOptions}
           defaultValue={order.courierId ?? "unassigned"}
-          disabled={couriersError}
-          isLoading={couriersLoading}
-          isError={couriersError}
+          disabled={isError}
+          isLoading={isLoading}
+          isError={isError}
           errorMessage="Failed to load couriers"
           loadingMessage="Loading couriers..."
         />

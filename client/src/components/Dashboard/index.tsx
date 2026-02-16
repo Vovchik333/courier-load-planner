@@ -3,6 +3,7 @@ import { DayBoard } from "./components/DayBoard";
 import { UnassignedOrders } from "./components/UnassignedOrders";
 import { Notes } from "./components/Notes";
 import { Loader } from "../Loader";
+import { ErrorMessage } from "../ErrorMessage";
 
 type Props = {
   date: string;
@@ -14,17 +15,11 @@ export const Dashboard: React.FC<Props> = ({
   const { data, isLoading, error } = useDayView(date);
 
   if (isLoading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-destructive">Error: {error.message}</div>
-      </div>
-    );
+    return <ErrorMessage isError={true} error={error} />;
   }
 
   if (!data) {
@@ -32,6 +27,7 @@ export const Dashboard: React.FC<Props> = ({
   }
 
   const { slots, couriers, unassignedOrders } = data;
+  const couriersList = couriers.map(c => c.courier);
 
   return (
     <div className="flex gap-6 h-full min-h-0">
@@ -40,7 +36,10 @@ export const Dashboard: React.FC<Props> = ({
         couriers={couriers} 
       />
       <div className="w-96 space-y-6 flex-shrink-0">
-        <UnassignedOrders orders={unassignedOrders} />
+        <UnassignedOrders 
+          orders={unassignedOrders} 
+          couriers={couriersList} 
+        />
         <Notes />
       </div>
     </div>

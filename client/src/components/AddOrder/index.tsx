@@ -14,7 +14,11 @@ type Props = {
 
 export const AddOrder: React.FC<Props> = ({ selectedDate }) => {
   const createOrder = useCreateOrder();
-  const { data: couriers, isLoading: couriersLoading, isError: couriersError } = useCouriers();
+  const { 
+    data: couriers, 
+    isLoading: couriersLoading, 
+    isError: couriersError, 
+  } = useCouriers();
 
   const courierOptions: SelectOption[] = [
     {
