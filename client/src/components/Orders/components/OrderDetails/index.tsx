@@ -2,6 +2,7 @@ import { AssignOrder } from "@/components/AssignOrder"
 import { formatHour } from "@/helpers/date.helper"
 import { useCouriers } from "@/hooks/useCouriers"
 import type { Order } from "@/common/types/orders.type"
+import { Loader } from "@/components/Loader"
 
 type Props = {
   order: Order;
@@ -10,8 +11,12 @@ type Props = {
 export const OrderDetails: React.FC<Props> = ({
   order,
 }) => {
-  const { data: couriers } = useCouriers();
+  const { data: couriers, isLoading: couriersLoading } = useCouriers();
   const courier = couriers?.find(c => c.id === order.courierId);
+
+  if (couriersLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="space-y-3">

@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label"
 import { FormModal } from "../FormModal"
 import { useCreateCourier } from "@/hooks/useCouriers"
 import { SecondaryButton } from "../SecondaryButton"
+import { ErrorMessage } from "../ErrorMessage"
 
 export const AddCourier = () => {
   const createCourier = useCreateCourier();
@@ -33,11 +34,10 @@ export const AddCourier = () => {
         <Label htmlFor="hourlyLimit">Hourly limit (work units):</Label>
         <Input id="hourlyLimit" name="hourlyLimit" placeholder="5" type="number" min="1" required />
       </Field>
-      {createCourier.isError && (
-        <div className="text-sm text-destructive">
-          Error: {createCourier.error?.message}
-        </div>
-      )}
+      <ErrorMessage 
+        isError={createCourier.isError} 
+        error={createCourier.error}
+      />
     </FormModal>
   )
 }

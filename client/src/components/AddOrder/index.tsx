@@ -5,6 +5,8 @@ import { FormModal } from "../FormModal"
 import { useCreateOrder } from "@/hooks/useOrders"
 import { useCouriers } from "@/hooks/useCouriers"
 import { PrimaryButton } from "../PrimaryButton"
+import { CustomSelect, type SelectOption } from "../CustomSelect"
+import { ErrorMessage } from "../ErrorMessage"
 
 type Props = {
   selectedDate: string;
@@ -12,7 +14,18 @@ type Props = {
 
 export const AddOrder: React.FC<Props> = ({ selectedDate }) => {
   const createOrder = useCreateOrder();
-  const { data: couriers } = useCouriers();
+  const { data: couriers, isLoading: couriersLoading, isError: couriersError } = useCouriers();
+
+  const courierOptions: SelectOption[] = [
+    {
+      value: "unassigned",
+      label: "Unassigned",
+    },
+    ...couriers?.map((courier) => ({
+      value: courier.id,
+      label: courier.name,
+    })) ?? [],
+  ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.currentTarget);
@@ -62,19 +75,16 @@ export const AddOrder: React.FC<Props> = ({ selectedDate }) => {
       </Field>
       <Field>
         <Label htmlFor="courier">Courier:</Label>
-        <select
-          id="courier"
+        <CustomSelect 
           name="courier"
-          className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
+          options={courierOptions}
           defaultValue="unassigned"
-        >
-          <option value="unassigned">Unassigned</option>
-          {couriers?.map((courier) => (
-            <option key={courier.id} value={courier.id}>
-              {courier.name}
-            </option>
-          ))}
-        </select>
+          disabled={couriersError}
+          isLoading={couriersLoading}
+          isError={couriersError}
+          errorMessage="Failed to load couriers"
+          loadingMessage="Loading couriers..."
+        />
       </Field>
       <Field>
         <Label htmlFor="work-units">Work units:</Label>
@@ -87,11 +97,10 @@ export const AddOrder: React.FC<Props> = ({ selectedDate }) => {
           required 
         />
       </Field>
-      {createOrder.isError && (
-        <div className="text-sm text-destructive">
-          Error: {createOrder.error?.message}
-        </div>
-      )}
+      <ErrorMessage 
+        isError={createOrder.isError} 
+        error={createOrder.error}
+      />
     </FormModal>
   )
 }

@@ -4,9 +4,11 @@ import { Label } from "@/components/ui/label"
 import { FormModal } from "@/components/FormModal"
 import { useAssignOrder } from "@/hooks/useOrders"
 import { useCouriers } from "@/hooks/useCouriers"
-import { formatHour } from "@/helpers/date.helper"
 import type { Order } from "@/common/types/orders.type"
 import { SecondaryButton } from "../SecondaryButton"
+import { OrderInfo } from "./components/OrderInfo"
+import { CustomSelect, type SelectOption } from "../CustomSelect"
+import { ErrorMessage } from "../ErrorMessage"
 
 type Props = {
   order: Order;
@@ -15,7 +17,7 @@ type Props = {
 
 export const AssignOrder: React.FC<Props> = ({ order, triggerElement }) => {
   const assignOrder = useAssignOrder();
-  const { data: couriers } = useCouriers();
+  const { data: couriers, isLoading: couriersLoading, isError: couriersError } = useCouriers();
 
   const currentCourier = couriers?.find(c => c.id === order.courierId);
   const isReassign = order.courierId !== null;
@@ -23,6 +25,16 @@ export const AssignOrder: React.FC<Props> = ({ order, triggerElement }) => {
   const defaultButton = triggerElement || (
     <SecondaryButton>{isReassign ? "Reassign" : "Assign"}</SecondaryButton>
   );
+  const courierOptions: SelectOption[] = [
+    {
+      value: "unassigned",
+      label: "Unassigned",
+    },
+    ...couriers?.map((courier) => ({
+      value: courier.id,
+      label: courier.name,
+    })) ?? [],
+  ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.currentTarget);
@@ -42,18 +54,7 @@ export const AssignOrder: React.FC<Props> = ({ order, triggerElement }) => {
       title={title}
       onSubmit={handleSubmit}
     >
-      <div className="text-sm space-y-2 pb-4 border-b">
-        <div>
-          <span className="font-medium">Order:</span> {order.id}
-        </div>
-        <div>
-          <span className="font-medium">Date:</span> {order.date}
-        </div>
-        <div>
-          <span className="font-medium">Hour:</span> {formatHour(order.scheduledHour)}
-        </div>
-      </div>
-
+      <OrderInfo order={order} />
       <Field>
         <Label htmlFor="current-courier">Current courier:</Label>
         <Input 
@@ -64,29 +65,23 @@ export const AssignOrder: React.FC<Props> = ({ order, triggerElement }) => {
           className="bg-muted"
         />
       </Field>
-
       <Field>
         <Label htmlFor="move-to">Move to:</Label>
-        <select
-          id="move-to"
+        <CustomSelect 
           name="move-to"
-          className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
-          defaultValue={order.courierId || "unassigned"}
-        >
-          <option value="unassigned">Unassigned</option>
-          {couriers?.map((courier) => (
-            <option key={courier.id} value={courier.id}>
-              {courier.name}
-            </option>
-          ))}
-        </select>
+          options={courierOptions}
+          defaultValue={order.courierId ?? "unassigned"}
+          disabled={couriersError}
+          isLoading={couriersLoading}
+          isError={couriersError}
+          errorMessage="Failed to load couriers"
+          loadingMessage="Loading couriers..."
+        />
       </Field>
-
-      {assignOrder.isError && (
-        <div className="text-sm text-destructive">
-          Error: {assignOrder.error?.message}
-        </div>
-      )}
+      <ErrorMessage 
+        isError={assignOrder.isError} 
+        error={assignOrder.error}
+      />
     </FormModal>
   )
 }

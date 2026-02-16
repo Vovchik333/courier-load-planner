@@ -36,8 +36,10 @@ export const FormModal: React.FC<Props> = ({
     e.preventDefault();
 
     if (onSubmit) {
-      await onSubmit(e);
-      setOpen(false);
+      try {
+        await onSubmit(e);
+        setOpen(false);
+      } catch {}
     }
   };
 

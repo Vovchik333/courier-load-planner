@@ -17,14 +17,21 @@ async function request<T>(url: string, options: RequestOptions = {}): Promise<T>
     config.body = JSON.stringify(body);
   }
 
-  const response = await fetch(`${BASE_URL}${url}`, config);
+  try {
+    const response = await fetch(`${BASE_URL}${url}`, config);
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: response.statusText }));
-    throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: response.statusText }));
+      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error('Network error: Please check your internet connection');
+    }
+    throw error;
   }
-
-  return response.json();
 }
 
 export const apiClient = {
