@@ -17,6 +17,12 @@ courier-load-planner/
 
 ## Getting Started
 
+Clone project with command:
+
+```bash
+git clone https://github.com/Vovchik333/courier-load-planner.git
+```
+
 ### 1. Start the Server
 
 The server runs on `http://localhost:3000` by default.
