@@ -75,11 +75,10 @@ Open your browser and navigate to:
 
 The server uses the following environment variables (optional):
 
-- `PORT` - Server port (default: `3000`)
+Create a `.env` file in the `client` directory:
 
-Example:
-```bash
-PORT=3000 npm run start:dev
+```env
+PORT=3000
 ```
 
 ### Client
