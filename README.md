@@ -20,7 +20,7 @@ courier-load-planner/
 Clone project with command:
 
 ```bash
-git clone https://github.com/Vovchik333/courier-load-planner.git
+git clone 
 ```
 
 ### 1. Start the Server
@@ -36,6 +36,7 @@ npm install
 
 # Development mode (with hot reload)
 npm run start:dev
+```
 
 The API will be available at `http://localhost:3000/api`
 
@@ -54,6 +55,7 @@ npm install
 
 # Development mode
 npm run dev
+```
 
 ### 3. Access the Application
 
