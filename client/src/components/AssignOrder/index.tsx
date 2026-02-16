@@ -1,51 +1,105 @@
 import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Modal } from "../Modal"
-import { Button } from "../ui/button"
+import { FormModal } from "@/components/FormModal"
+import { useAssignOrder } from "@/hooks/useOrders"
+import { useCouriers } from "@/hooks/useCouriers"
+import type { Order } from "@/common/types/orders.type"
+import type { Courier } from "@/common/types/courier.type"
+import { SecondaryButton } from "../SecondaryButton"
+import { OrderInfo } from "./components/OrderInfo"
+import { CustomSelect, type SelectOption } from "../CustomSelect"
+import { ErrorMessage } from "../ErrorMessage"
+import { PrimaryButton } from "../PrimaryButton"
 
 type Props = {
+  order: Order;
+  triggerElement?: React.ReactNode;
+  couriers?: Courier[];
+};
 
-}
-
-export const AssignOrder: React.FC<Props> = ({
-
+export const AssignOrder: React.FC<Props> = ({ 
+  order, 
+  triggerElement, 
+  couriers: 
+  providedCouriers
 }) => {
+  const assignOrder = useAssignOrder();
+  const { 
+    data: fetchedCouriers, 
+    isLoading: couriersLoading, 
+    isError: couriersError 
+  } = useCouriers({
+    enabled: !providedCouriers,
+  });
+  
+  const couriers = providedCouriers ?? fetchedCouriers;
+  const isLoading = providedCouriers ? false : couriersLoading;
+  const isError = providedCouriers ? false : couriersError;
+
+  const currentCourier = couriers?.find(c => c.id === order.courierId);
+  const isReassign = order.courierId !== null;
+  const title = isReassign ? "Reassign Order" : "Assign Order";
+  const defaultButton = triggerElement || (
+    isReassign ? <PrimaryButton>Reassign</PrimaryButton> : <SecondaryButton>Assign</SecondaryButton>
+  );
+  const courierOptions: SelectOption[] = [
+    {
+      value: "unassigned",
+      label: "Unassigned",
+    },
+    ...couriers?.map((courier) => ({
+      value: courier.id,
+      label: courier.name,
+    })) ?? [],
+  ];
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(e.currentTarget);
+    const courierId = formData.get('move-to') as string;
+    
+    await assignOrder.mutateAsync({
+      orderId: order.id,
+      data: {
+        courierId: courierId === 'unassigned' ? null : courierId || null,
+      },
+    });
+  };
+
   return (
-    <Modal
-      triggerElement={<Button variant="outline">Assign</Button>}
-      title="Assign Order"
+    <FormModal
+      triggerElement={defaultButton}
+      title={title}
+      onSubmit={handleSubmit}
     >
-      <Field>
-        <div className="text-sm">
-          Order: o2 Date: 2026-02-13 Hour: 16:00
-        </div>
-      </Field>
+      <OrderInfo order={order} />
       <Field>
         <Label htmlFor="current-courier">Current courier:</Label>
         <Input 
           id="current-courier" 
           name="current-courier" 
-          value="Alex"
+          value={currentCourier?.name || "Unassigned"}
           readOnly
           className="bg-muted"
         />
       </Field>
       <Field>
         <Label htmlFor="move-to">Move to:</Label>
-        <select
-          id="move-to"
+        <CustomSelect 
           name="move-to"
-          className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
-          defaultValue=""
-        >
-          <option value="">Select courier</option>
-          <option value="any">Any courier</option>
-          <option value="alex">Alex</option>
-          <option value="oksana">Oksana</option>
-          <option value="ihor">Ihor</option>
-        </select>
+          options={courierOptions}
+          defaultValue={order.courierId ?? "unassigned"}
+          disabled={isError}
+          isLoading={isLoading}
+          isError={isError}
+          errorMessage="Failed to load couriers"
+          loadingMessage="Loading couriers..."
+        />
       </Field>
-    </Modal>
+      <ErrorMessage 
+        isError={assignOrder.isError} 
+        error={assignOrder.error}
+      />
+    </FormModal>
   )
 }

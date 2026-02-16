@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreateCourierDto } from './dto/create-courier.dto';
-import { CourierRepository } from '../../database/repositories/courier.repository';
+import { ICourierRepository, COURIER_REPOSITORY_TOKEN } from '../../database/interfaces/courier-repository.interface';
 
 @Injectable()
 export class CouriersService {
-  constructor(private readonly courierRepository: CourierRepository) {}
+  constructor(
+    @Inject(COURIER_REPOSITORY_TOKEN)
+    private readonly courierRepository: ICourierRepository,
+  ) {}
 
   async create(createCourierDto: CreateCourierDto) {
     const courier = await this.courierRepository.create(createCourierDto);

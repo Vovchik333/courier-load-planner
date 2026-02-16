@@ -1,23 +1,43 @@
 import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Modal } from "../Modal"
-import { Button } from "../ui/button"
+import { FormModal } from "../FormModal"
+import { useCreateCourier } from "@/hooks/useCouriers"
+import { SecondaryButton } from "../SecondaryButton"
+import { ErrorMessage } from "../ErrorMessage"
 
 export const AddCourier = () => {
+  const createCourier = useCreateCourier();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(e.currentTarget);
+    
+    await createCourier.mutateAsync(
+      {
+        name: formData.get('name') as string,
+        hourlyLimit: parseInt(formData.get('hourlyLimit') as string, 10),
+      }
+    );
+  };
+
   return (
-    <Modal
-      triggerElement={<Button variant="outline">+ Add Courier</Button>}
+    <FormModal
+      triggerElement={<SecondaryButton>+ Add Courier</SecondaryButton>}
       title="Add Courier"
+      onSubmit={handleSubmit}
     >
       <Field>
-        <Label htmlFor="name-1">Name</Label>
-        <Input id="name-1" name="name" placeholder="John Doe" />
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" name="name" placeholder="John Doe" required />
       </Field>
       <Field>
-        <Label htmlFor="hourly-limit-1">Hourly limit (work units):</Label>
-        <Input id="username-1" name="username" placeholder="5" type="number" />
+        <Label htmlFor="hourlyLimit">Hourly limit (work units):</Label>
+        <Input id="hourlyLimit" name="hourlyLimit" placeholder="5" type="number" min="1" required />
       </Field>
-    </Modal>
+      <ErrorMessage 
+        isError={createCourier.isError} 
+        error={createCourier.error}
+      />
+    </FormModal>
   )
 }
