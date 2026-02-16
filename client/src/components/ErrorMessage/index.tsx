@@ -13,7 +13,7 @@ export const ErrorMessage: React.FC<Props> = ({
     <>
       {isError && error && (
         <div className={`text-sm text-destructive ${className || ''}`}>
-          Error: {error.message || 'An error occurred'}
+          {error.message || 'An error occurred'}
         </div>
       )}
     </>

@@ -1,5 +1,5 @@
 import type { RequestOptions } from "@/common/types/request-options.type";
-import { BASE_URL } from "@/config";
+import { API_URL } from "@/config";
 import { QueryClient } from "@tanstack/react-query";
 
 async function request<T>(url: string, options: RequestOptions = {}): Promise<T> {
@@ -18,7 +18,7 @@ async function request<T>(url: string, options: RequestOptions = {}): Promise<T>
   }
 
   try {
-    const response = await fetch(`${BASE_URL}${url}`, config);
+    const response = await fetch(`${API_URL}${url}`, config);
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ message: response.statusText }));
@@ -46,8 +46,8 @@ export const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: 1,
-      staleTime: 1000 * 60 * 5, // 5 minutes - data is considered fresh for 5 minutes
-      gcTime: 1000 * 60 * 10, // 10 minutes - cache is kept for 10 minutes after component unmounts
+      staleTime: 1000 * 60 * 5, 
+      gcTime: 1000 * 60 * 10, 
     },
     mutations: {
       retry: 1,

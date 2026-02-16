@@ -10,6 +10,7 @@ import { SecondaryButton } from "../SecondaryButton"
 import { OrderInfo } from "./components/OrderInfo"
 import { CustomSelect, type SelectOption } from "../CustomSelect"
 import { ErrorMessage } from "../ErrorMessage"
+import { PrimaryButton } from "../PrimaryButton"
 
 type Props = {
   order: Order;
@@ -33,9 +34,9 @@ export const AssignOrder: React.FC<Props> = ({
 
   const currentCourier = couriers?.find(c => c.id === order.courierId);
   const isReassign = order.courierId !== null;
-  const title = isReassign ? "Assign / Reassign Order" : "Assign Order";
+  const title = isReassign ? "Reassign Order" : "Assign Order";
   const defaultButton = triggerElement || (
-    <SecondaryButton>{isReassign ? "Reassign" : "Assign"}</SecondaryButton>
+    isReassign ? <PrimaryButton>Reassign</PrimaryButton> : <SecondaryButton>Assign</SecondaryButton>
   );
   const courierOptions: SelectOption[] = [
     {

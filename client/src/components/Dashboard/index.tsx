@@ -30,12 +30,12 @@ export const Dashboard: React.FC<Props> = ({
   const couriersList = couriers.map(c => c.courier);
 
   return (
-    <div className="flex gap-6 h-full min-h-0">
+    <div className="flex flex-col-reverse lg:flex-row gap-6 h-full min-h-0">
       <DayBoard 
         slots={slots} 
         couriers={couriers} 
       />
-      <div className="w-96 space-y-6 flex-shrink-0">
+      <div className="w-full lg:w-96 space-y-6 flex-shrink-0">
         <UnassignedOrders 
           orders={unassignedOrders} 
           couriers={couriersList} 
