@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -11,6 +10,8 @@ import {
 } from "@/components/ui/dialog"
 import { FieldGroup } from "@/components/ui/field"
 import type { ReactNode } from "react"
+import { PrimaryButton } from "../PrimaryButton"
+import { SecondaryButton } from "../SecondaryButton"
 
 type Props = {
   triggerElement: ReactNode;
@@ -54,12 +55,17 @@ export const FormModal: React.FC<Props> = ({
             {children}
           </FieldGroup>
           <DialogFooter>
-            <Button type="submit">{submitButtonText}</Button>
+            <PrimaryButton 
+              type="submit"
+            >
+              {submitButtonText}
+            </PrimaryButton>
             <DialogClose asChild>
-              <Button 
-                variant="outline" 
+              <SecondaryButton 
                 type="button"
-              >{cancelButtonText}</Button>
+              >
+                {cancelButtonText}
+              </SecondaryButton>
             </DialogClose>
           </DialogFooter>
         </form>

@@ -2,6 +2,7 @@ import { useDayView } from "@/hooks/useDayView";
 import { DayBoard } from "./components/DayBoard";
 import { UnassignedOrders } from "./components/UnassignedOrders";
 import { Notes } from "./components/Notes";
+import { Loader } from "../Loader";
 
 type Props = {
   date: string;
@@ -14,9 +15,7 @@ export const Dashboard: React.FC<Props> = ({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
+      <Loader />
     );
   }
 

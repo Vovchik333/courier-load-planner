@@ -2,9 +2,9 @@ import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { FormModal } from "../FormModal"
-import { Button } from "../ui/button"
 import { useCreateOrder } from "@/hooks/useOrders"
 import { useCouriers } from "@/hooks/useCouriers"
+import { PrimaryButton } from "../PrimaryButton"
 
 type Props = {
   selectedDate: string;
@@ -33,7 +33,7 @@ export const AddOrder: React.FC<Props> = ({ selectedDate }) => {
 
   return (
     <FormModal
-      triggerElement={<Button variant="outline">+ Add Order</Button>}
+      triggerElement={<PrimaryButton>+ Add Order</PrimaryButton>}
       title="Add Order"
       submitButtonText="Create"
       onSubmit={handleSubmit}
@@ -54,7 +54,7 @@ export const AddOrder: React.FC<Props> = ({ selectedDate }) => {
           id="hour" 
           name="hour" 
           type="number" 
-          defaultValue="10" 
+          placeholder="10"
           min="10" 
           max="17" 
           required 

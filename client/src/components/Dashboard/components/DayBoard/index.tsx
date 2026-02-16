@@ -1,8 +1,8 @@
 import { formatHour } from "@/helpers/date.helper";
-import { Orders } from "../../../Orders";
 import type { HourSlotType } from "@/common/types/hour-slot.type";
 import type { CourierWithLoad } from "@/common/types/courier.type";
-import type { LoadBySlot } from "@/common/types/hour-slot.type";
+import { TableHead } from "./components/TableHead";
+import { TableBody } from "./components/TableBody";
 
 type Props = {
   slots: HourSlotType[];
@@ -22,58 +22,8 @@ export const DayBoard: React.FC<Props> = ({
       <div className="rounded-lg overflow-hidden flex-1 flex flex-col min-h-0">
         <div className="overflow-y-auto flex-1">
           <table className="w-full border-collapse">
-            <thead className="sticky top-0 bg-muted z-10">
-              <tr>
-                <th className="border p-2 text-left font-medium">Courier</th>
-                {slots.map((hour) => (
-                  <th key={hour} className="border p-2 text-center font-medium">
-                    {formatHour(hour)}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {couriers.map((courierWithLoad: CourierWithLoad) => {
-                const { courier, loadBySlot } = courierWithLoad;
-                return (
-                  <tr key={courier.id}>
-                    <td className="border p-2 font-medium">
-                      {courier.name}
-                      <span className="text-muted-foreground text-sm ml-2">
-                        (limit: {courier.hourlyLimit})
-                      </span>
-                    </td>
-                    {slots.map((hour) => {
-                      const slot = loadBySlot.find((s: LoadBySlot) => s.hour === hour);
-                      const load = slot?.load ?? 0;
-                      const overload = slot?.overload ?? 0;
-                      const orders = slot?.orders ?? [];
-
-                      return (
-                        <td
-                          key={`${courier.id}-${hour}`}
-                          className="border p-3 text-center cursor-pointer hover:bg-accent transition-colors"
-                        >
-                          <Orders 
-                            orders={orders}
-                            triggerElement={
-                              <div className="flex flex-col items-center gap-1">
-                                <span className="text-lg font-semibold">{load}</span>
-                                {overload > 0 && (
-                                  <span className="text-xs text-destructive font-medium">
-                                    over +{overload}
-                                  </span>
-                                )}
-                              </div>
-                            }
-                          />
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
+            <TableHead slots={slots} />
+            <TableBody couriers={couriers} slots={slots} />
           </table>
         </div>
       </div>

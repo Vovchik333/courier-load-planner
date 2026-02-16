@@ -2,11 +2,11 @@ import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { FormModal } from "@/components/FormModal"
-import { Button } from "@/components/ui/button"
 import { useAssignOrder } from "@/hooks/useOrders"
 import { useCouriers } from "@/hooks/useCouriers"
 import { formatHour } from "@/helpers/date.helper"
 import type { Order } from "@/common/types/orders.type"
+import { SecondaryButton } from "../SecondaryButton"
 
 type Props = {
   order: Order;
@@ -18,10 +18,10 @@ export const AssignOrder: React.FC<Props> = ({ order, triggerElement }) => {
   const { data: couriers } = useCouriers();
 
   const currentCourier = couriers?.find(c => c.id === order.courierId);
-  const isReassign = !!order.courierId;
+  const isReassign = order.courierId !== null;
   const title = isReassign ? "Assign / Reassign Order" : "Assign Order";
   const defaultButton = triggerElement || (
-    <Button variant="outline">{isReassign ? "Reassign" : "Assign"}</Button>
+    <SecondaryButton>{isReassign ? "Reassign" : "Assign"}</SecondaryButton>
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -2,8 +2,8 @@ import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { FormModal } from "../FormModal"
-import { Button } from "../ui/button"
 import { useCreateCourier } from "@/hooks/useCouriers"
+import { SecondaryButton } from "../SecondaryButton"
 
 export const AddCourier = () => {
   const createCourier = useCreateCourier();
@@ -21,7 +21,7 @@ export const AddCourier = () => {
 
   return (
     <FormModal
-      triggerElement={<Button variant="outline">+ Add Courier</Button>}
+      triggerElement={<SecondaryButton>+ Add Courier</SecondaryButton>}
       title="Add Courier"
       onSubmit={handleSubmit}
     >
