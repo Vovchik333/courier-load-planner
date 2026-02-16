@@ -1,15 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '../api/client';
-import { API_ENDPOINTS } from '../api/endpoints';
-import type { Order, CreateOrderDto, AssignOrderDto } from '@/common/types/orders.type';
+import { ordersService } from '../api/services';
+import { queryKeys } from '../api/query-keys';
+import type { CreateOrderDto, AssignOrderDto, Order } from '@/common/types/orders.type';
 
 export function useCreateOrder() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateOrderDto) => apiClient.post<Order>(API_ENDPOINTS.orders.create, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dayView'] });
+    mutationFn: (data: CreateOrderDto) => ordersService.create(data),
+    onSuccess: (newOrder: Order) => {
+      queryClient.invalidateQueries({ 
+        queryKey: queryKeys.dayView.list(newOrder.date) 
+      });
     },
   });
 }
@@ -18,9 +20,12 @@ export function useAssignOrder() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ orderId, data }: { orderId: string; data: AssignOrderDto }) => apiClient.patch<Order>(API_ENDPOINTS.orders.assign(orderId), data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dayView'] });
+    mutationFn: ({ orderId, data }: { orderId: string; data: AssignOrderDto }) => 
+      ordersService.assign(orderId, data),
+    onSuccess: (updatedOrder: Order) => {
+      queryClient.invalidateQueries({ 
+        queryKey: queryKeys.dayView.list(updatedOrder.date) 
+      });
     },
   });
 }

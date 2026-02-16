@@ -3,17 +3,15 @@ import {
   useMutation, 
   useQueryClient 
 } from '@tanstack/react-query';
-import { apiClient } from '../api/client';
-import { API_ENDPOINTS } from '../api/endpoints';
-import type { 
-  Courier, 
-  CreateCourierDto 
-} from '@/common/types/courier.type';
+import { couriersService } from '../api/services';
+import { queryKeys } from '../api/query-keys';
+import type { CreateCourierDto } from '@/common/types/courier.type';
 
 export function useCouriers() {
   return useQuery({
-    queryKey: ['couriers'],
-    queryFn: () => apiClient.get<Courier[]>(API_ENDPOINTS.couriers.list),
+    queryKey: queryKeys.couriers.list(),
+    queryFn: () => couriersService.getAll(),
+    staleTime: 1000 * 60 * 10, 
   });
 }
 
@@ -21,10 +19,10 @@ export function useCreateCourier() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateCourierDto) => apiClient.post<Courier>(API_ENDPOINTS.couriers.create, data),
+    mutationFn: (data: CreateCourierDto) => couriersService.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['couriers'] });
-      queryClient.invalidateQueries({ queryKey: ['dayView'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.couriers.list() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dayView.all });
     },
   });
 }
