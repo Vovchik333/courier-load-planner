@@ -1,33 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { Courier } from "../models/courier.model";
+import { couriers } from "../models/couriers.model";
 import { randomUUID } from "crypto";
 import { CreateCourierDto } from "../../modules/couriers/dto/create-courier.dto";
-
-const couriers: Courier[] = [
-  {
-    id: '1',
-    name: 'John Doe',
-    hourlyLimit: 10,
-  },
-  {
-    id: '2',
-    name: 'Jane Doe',
-    hourlyLimit: 10,
-  },
-  {
-    id: '3',
-    name: 'Jim Doe',
-    hourlyLimit: 10,
-  },
-  {
-    id: '4',
-    name: 'Jill Doe',
-    hourlyLimit: 10,
-  },
-];
+import { ICourierRepository } from "../interfaces/courier-repository.interface";
+import { Courier } from "src/common/types/courier.type";
 
 @Injectable()
-export class CourierRepository {
+export class CourierRepository implements ICourierRepository {
   async create(createCourierDto: CreateCourierDto): Promise<Courier> {
     const newCourier: Courier = {
       id: randomUUID(),

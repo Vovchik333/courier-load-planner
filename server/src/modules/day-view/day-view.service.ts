@@ -1,22 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { OrderRepository } from '../../database/repositories/order.repository';
-import { CourierRepository } from '../../database/repositories/courier.repository';
+import { Injectable, Inject } from '@nestjs/common';
+import { IOrderRepository, ORDER_REPOSITORY_TOKEN } from '../../database/interfaces/order-repository.interface';
+import { ICourierRepository, COURIER_REPOSITORY_TOKEN } from '../../database/interfaces/courier-repository.interface';
 import {
   DayViewResponseDto,
   HourSlot,
   LoadBySlot,
   CourierWithLoad,
 } from './dto/day-view-response.dto';
-import { Order } from '../../database/models/order.model';
-import { Courier } from '../../database/models/courier.model';
+import { Order } from 'src/common/types/order.type';
+import { Courier } from 'src/common/types/courier.type';
 
 @Injectable()
 export class DayViewService {
   private readonly HOUR_SLOTS: HourSlot[] = [10, 11, 12, 13, 14, 15, 16, 17];
 
   constructor(
-    private readonly orderRepository: OrderRepository,
-    private readonly courierRepository: CourierRepository,
+    @Inject(ORDER_REPOSITORY_TOKEN)
+    private readonly orderRepository: IOrderRepository,
+    @Inject(COURIER_REPOSITORY_TOKEN)
+    private readonly courierRepository: ICourierRepository,
   ) {}
 
   async getDayView(date: string): Promise<DayViewResponseDto> {
