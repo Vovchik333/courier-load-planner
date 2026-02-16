@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { randomUUID } from "crypto";
 import { orders } from "../models/orders.model";
 import { CreateOrderDto } from "../../modules/orders/dto/create-order.dto";
@@ -22,7 +22,7 @@ export class OrderRepository implements IOrderRepository {
     const order = orders.find((order) => order.id === id);
 
     if (!order) {
-      throw new Error('Order not found');
+      throw new NotFoundException(`Order with ID ${id} not found`);
     }
 
     if (assignOrderDto.courierId !== undefined) {

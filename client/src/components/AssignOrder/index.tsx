@@ -26,7 +26,12 @@ export const AssignOrder: React.FC<Props> = ({
 }) => {
   const assignOrder = useAssignOrder();
   const { 
-    data: fetchedCouriers, isLoading: couriersLoading, isError: couriersError } = useCouriers();
+    data: fetchedCouriers, 
+    isLoading: couriersLoading, 
+    isError: couriersError 
+  } = useCouriers({
+    enabled: !providedCouriers,
+  });
   
   const couriers = providedCouriers ?? fetchedCouriers;
   const isLoading = providedCouriers ? false : couriersLoading;

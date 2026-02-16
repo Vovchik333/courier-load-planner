@@ -7,11 +7,12 @@ import { couriersService } from '../api/services';
 import { queryKeys } from '../api/query-keys';
 import type { CreateCourierDto } from '@/common/types/courier.type';
 
-export function useCouriers() {
+export function useCouriers(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: queryKeys.couriers.list(),
     queryFn: () => couriersService.getAll(),
-    staleTime: 1000 * 60 * 10, 
+    staleTime: 1000 * 60 * 10,
+    enabled: options?.enabled,
   });
 }
 

@@ -89,7 +89,7 @@ The client uses the following environment variables (optional):
 Create a `.env` file in the `client` directory:
 
 ```env
-VITE_BASE_URL=http://localhost:3000
+VITE_API_URL=http://localhost:3000
 ```
 
 If not set, it defaults to `http://localhost:3000`.
