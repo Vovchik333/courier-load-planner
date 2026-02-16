@@ -75,7 +75,7 @@ Open your browser and navigate to:
 
 The server uses the following environment variables (optional):
 
-Create a `.env` file in the `client` directory:
+Create a `.env` file in the `server` directory:
 
 ```env
 PORT=3000
