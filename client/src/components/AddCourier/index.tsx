@@ -6,7 +6,7 @@ import { useCreateCourier } from "@/hooks/useCouriers"
 import { SecondaryButton } from "../SecondaryButton"
 import { ErrorMessage } from "../ErrorMessage"
 
-export const AddCourier = () => {
+export const AddCourier: React.FC = () => {
   const createCourier = useCreateCourier();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
