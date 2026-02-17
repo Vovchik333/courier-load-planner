@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, Min, Max, IsString, IsOptional, ValidateIf, IsDateString } from "class-validator";
+import { IsNotEmpty, IsNumber, Min, Max, IsString, ValidateIf, IsDateString, IsDefined } from "class-validator";
 
 export class CreateOrderDto {
   @IsDateString()
@@ -16,9 +16,8 @@ export class CreateOrderDto {
   @Min(1)
   workUnits: number;
 
-  @IsOptional()
-  @ValidateIf((o) => o.courierId != null)
-  @IsString()
+  @ValidateIf((o) => o.courierId !== null)
+  @IsString({ message: 'courierId must be a string or null' })
   @IsNotEmpty()
   courierId: string | null;
 }
