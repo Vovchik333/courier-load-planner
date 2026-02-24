@@ -1,9 +1,8 @@
-import { IsNotEmpty, IsString, IsOptional, ValidateIf } from "class-validator";
+import { IsNotEmpty, IsString, ValidateIf } from "class-validator";
 
 export class AssignOrderDto {
-  @IsOptional()
-  @ValidateIf((o) => o.courierId != null)
-  @IsString()
+  @ValidateIf((o) => o.courierId !== null)
+  @IsString({ message: 'courierId must be a string or null' })
   @IsNotEmpty()
   courierId: string | null;
 }
