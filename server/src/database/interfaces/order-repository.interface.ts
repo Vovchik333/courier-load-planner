@@ -1,10 +1,12 @@
 import { CreateOrderDto } from "src/modules/orders/dto/create-order.dto";
 import { AssignOrderDto } from "src/modules/orders/dto/assign-order.dto";
 import { Order } from "src/common/types/order.type";
+import { UpdateOrderDto } from "src/modules/orders/dto/update-order.dto";
 
 export interface IOrderRepository {
   create(createOrderDto: CreateOrderDto): Promise<Order>;
   updateOne(id: string, assignOrderDto: AssignOrderDto): Promise<Order>;
+  updateOrder(id: string, payload: UpdateOrderDto): Promise<Order | null>;
   findByDate(date: string): Promise<Order[]>;
   findUnassignedByDate(date: string): Promise<Order[]>;
 }

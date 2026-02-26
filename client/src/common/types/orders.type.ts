@@ -9,3 +9,5 @@ export interface Order {
 export interface CreateOrderDto extends Omit<Order, 'id'> {}
 
 export interface AssignOrderDto extends Pick<Order, 'courierId'> {}
+
+export interface UpdateOrderDto extends Pick<Order, 'date' | 'scheduledHour'> {}

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ordersService } from '../api/services';
 import { queryKeys } from '../api/query-keys';
-import type { CreateOrderDto, AssignOrderDto, Order } from '@/common/types/orders.type';
+import type { CreateOrderDto, AssignOrderDto, Order, UpdateOrderDto } from '@/common/types/orders.type';
 
 export function useCreateOrder() {
   const queryClient = useQueryClient();
@@ -26,6 +26,26 @@ export function useAssignOrder() {
       queryClient.invalidateQueries({ 
         queryKey: queryKeys.dayView.list(updatedOrder.date) 
       });
+    },
+  });
+}
+
+export function useUpdateOrder() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateOrderDto; previousDate: string }) => 
+      ordersService.updateOne(id, data),
+    onSuccess: (updatedOrder: Order, { previousDate }) => {
+      queryClient.invalidateQueries({ 
+        queryKey: queryKeys.dayView.list(updatedOrder.date)
+      });
+
+      if (previousDate !== updatedOrder.date) {
+        queryClient.invalidateQueries({ 
+          queryKey: queryKeys.dayView.list(previousDate)
+        });
+      }
     },
   });
 }
