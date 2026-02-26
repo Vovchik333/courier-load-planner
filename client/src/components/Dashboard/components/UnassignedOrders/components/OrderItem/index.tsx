@@ -2,6 +2,7 @@ import type { Order } from "@/common/types/orders.type";
 import type { Courier } from "@/common/types/courier.type";
 import { AssignOrder } from "@/components/AssignOrder"
 import { formatHour } from "@/helpers/date.helper";
+import { EditOrder } from "@/components/EditOrder";
 
 type Props = {
   order: Order;
@@ -19,10 +20,15 @@ export const OrderItem: React.FC<Props> = ({ order, couriers }) => {
           {formatHour(order.scheduledHour)} • {order.workUnits} units
         </div>
       </div>
-      <AssignOrder 
-        order={order} 
-        couriers={couriers} 
-      />
+      <div className="flex flex-col gap-2">
+        <AssignOrder 
+          order={order} 
+          couriers={couriers} 
+        />
+        <EditOrder 
+          order={order}
+        />
+      </div>
     </div>
   )
 }

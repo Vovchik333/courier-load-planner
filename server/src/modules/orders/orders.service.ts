@@ -1,7 +1,8 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AssignOrderDto } from './dto/assign-order.dto';
 import { IOrderRepository, ORDER_REPOSITORY_TOKEN } from '../../database/interfaces/order-repository.interface';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -21,4 +22,17 @@ export class OrdersService {
 
     return order;
   }
-}
+
+  async updayeOne(
+    id: string,
+    payload: UpdateOrderDto
+  ) {
+    const order = await this.orderRepository.updateOrder(id, payload);
+
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+
+    return order;
+  }
+} 

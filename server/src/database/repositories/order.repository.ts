@@ -5,6 +5,7 @@ import { CreateOrderDto } from "../../modules/orders/dto/create-order.dto";
 import { AssignOrderDto } from "../../modules/orders/dto/assign-order.dto";
 import { IOrderRepository } from "../interfaces/order-repository.interface";
 import { Order } from "src/common/types/order.type";
+import { UpdateOrderDto } from "src/modules/orders/dto/update-order.dto";
 
 @Injectable()
 export class OrderRepository implements IOrderRepository {
@@ -28,6 +29,19 @@ export class OrderRepository implements IOrderRepository {
     if (assignOrderDto.courierId !== undefined) {
       order.courierId = assignOrderDto.courierId;
     }
+
+    return order;
+  }
+
+  async updateOrder(id: string, payload: UpdateOrderDto): Promise<Order | null> {
+    const order = orders.find((order) => order.id === id);
+
+    if (!order) {
+      return null;
+    }
+
+    order.date = payload.date;
+    order.scheduledHour = payload.scheduledHour;
 
     return order;
   }

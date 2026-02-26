@@ -2,6 +2,7 @@ import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AssignOrderDto } from './dto/assign-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -18,5 +19,13 @@ export class OrdersController {
     @Body() assignOrderDto: AssignOrderDto
   ) {
     return this.ordersService.assign(id, assignOrderDto);
+  }
+
+  @Patch('/:id')
+  updateOne(
+    @Param('id') id: string,
+    @Body() payload: UpdateOrderDto
+  ) {
+    return this.ordersService.updayeOne(id, payload);
   }
 }
